@@ -6,6 +6,8 @@ import net.aesircraft.machina.Machina;
 import net.aesircraft.machina.Objects.MachinaBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,6 +30,9 @@ public class PlayerListener implements Listener {
 	    return;
 	}
 	if (e.isCancelled()) {
+	    return;
+	}
+	if (changeType(e)) {
 	    return;
 	}
 	SpoutBlock b = (SpoutBlock) e.getBlock();
@@ -132,6 +137,10 @@ public class PlayerListener implements Listener {
 		    e.getPlayer().sendMessage(("§4You do not have permission to use that!"));
 		    e.setCancelled(true);
 		    return;
+		} else {
+		    e.getPlayer().sendMessage(("§4You do not have permission to use that!"));
+		    e.setCancelled(true);
+		    return;
 		}
 	    }
 	}
@@ -143,6 +152,7 @@ public class PlayerListener implements Listener {
 		    return;
 		}
 		mb.clearType();
+		e.getPlayer().sendMessage("§2Type Cleared!!");
 		return;
 	    }
 	}
@@ -162,12 +172,56 @@ public class PlayerListener implements Listener {
 		e.getPlayer().sendMessage("§4Please set a type to work with!");
 		return;
 	    }
+	    if (Config.userPermissions) {
+		if (!Machina.permission.has(e.getPlayer(), "machina.blocks." + e.getPlayer().getItemInHand().getTypeId() + "-" + e.getPlayer().getItemInHand().getDurability())) {
+		    e.getPlayer().sendMessage(("§4You do not have permission to use that!"));
+		    return;
+		}
+	    }
 	    mb.setType(e.getPlayer().getItemInHand());
+	    e.getPlayer().sendMessage("§2You have set the type to §b" + e.getPlayer().getItemInHand().getTypeId() + ":" + e.getPlayer().getItemInHand().getDurability() + "§2!");
 	    return;
 	}
 	mb.setWorking(e.getPlayer());
 	e.getPlayer().sendMessage("§2Now editing Machina Block with §b" + mb.getType().getTypeId() + ":" + mb.getType().getDurability() + "§2!");
 	return;
+    }
+
+    public boolean changeType(BlockPlaceEvent e) {
+	SpoutBlock b = (SpoutBlock) e.getBlock().getRelative(BlockFace.DOWN);
+	SpoutBlock t = (SpoutBlock) e.getBlock();
+	if (!b.isCustomBlock()) {
+	    return false;
+	}
+	if (!b.getCustomBlock().getName().contains("Machina Block")) {
+	    return false;
+	}
+	MachinaBlock mb = new MachinaBlock(e.getBlock().getRelative(BlockFace.DOWN));
+	mb.load();
+	if (!e.getPlayer().getName().toLowerCase().equals(mb.getOwner().toLowerCase()) && !e.getPlayer().isOp()) {
+	    if (Config.userPermissions) {
+		if (!Machina.permission.has(e.getPlayer(), "machina.admin")) {
+		    e.getPlayer().sendMessage(("§4You do not have permission to use that!"));
+		    return false;
+		}
+	    } else {
+		e.getPlayer().sendMessage(("§4You do not have permission to use that!"));
+		return false;
+	    }
+	}
+	if (mb.getType().getTypeId() != 0) {
+	    return false;
+	}
+	if (Config.userPermissions) {
+	    if (!Machina.permission.has(e.getPlayer(), "machina.blocks." + t.getTypeId() + "-" + t.getData())) {
+		e.getPlayer().sendMessage(("§4You do not have permission to use that!"));
+		return false;
+	    }
+	}
+	mb.setType(new ItemStack(t.getTypeId(), 1, t.getData()));
+	e.getPlayer().sendMessage("§2You have set the type to §b" + t.getTypeId() + ":" + t.getData() + "§2!");
+
+	return true;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
