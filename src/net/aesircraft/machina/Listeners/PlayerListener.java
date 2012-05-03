@@ -258,6 +258,11 @@ public class PlayerListener implements Listener {
 		}
 	    }
 	}
+	if (DataHolder.workings.containsKey(e.getPlayer())) {
+	    if (DataHolder.workings.get(e.getPlayer()).getBlock() == e.getBlock()) {
+		DataHolder.workings.get(e.getPlayer()).finishWorking();
+	    }
+	}
 	mb.breakNaturally();
     }
 }

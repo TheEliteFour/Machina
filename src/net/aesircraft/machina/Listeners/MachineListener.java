@@ -85,6 +85,9 @@ public class MachineListener implements Listener {
 	}
 	MachinaBlock mb = new MachinaBlock(e.getBlock());
 	mb.load();
+	if (mb.isWorking()){
+	    return;
+	}
 	if (e.getBlock().isBlockPowered() && !mb.isPowered()) {
 	    mb.setBlocks();
 	    return;

@@ -296,7 +296,7 @@ public class MachinaBlock {
 		}
 		location.getWorld().dropItem(location, i);
 	    }
-	}
+	}	
 	delete();
     }
 }

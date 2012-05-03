@@ -1,6 +1,6 @@
 name: Machina
 main: net.aesircraft.machina.Machina
-version: 1.0.1
+version: 1.0.2
 description: Complete Controller Block system!
 authors: [TheElite4]
 softdepend: [ Vault,Spout ]
