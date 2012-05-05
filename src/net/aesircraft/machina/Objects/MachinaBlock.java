@@ -235,6 +235,7 @@ public class MachinaBlock {
 	this.player = player;
 	maint = true;
 	DataHolder.workings.put(player, this);
+	DataHolder.workings2.put(mloc.getString(), this);
     }
 
     public boolean isWorking() {
@@ -248,6 +249,7 @@ public class MachinaBlock {
 	}
 	maint = false;
 	DataHolder.workings.remove(player);
+	DataHolder.workings2.remove(mloc.getString());
 	player = null;
     }
 

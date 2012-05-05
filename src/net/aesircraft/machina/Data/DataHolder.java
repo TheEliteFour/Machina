@@ -8,4 +8,5 @@ public class DataHolder {
 
     //public static HashMap<Block,MachinaBlock> blocks=new HashMap<Block,MachinaBlock>();
     public static HashMap<Player, MachinaBlock> workings = new HashMap<Player, MachinaBlock>();
+    public static HashMap<String, MachinaBlock> workings2 = new HashMap<String, MachinaBlock>();
 }

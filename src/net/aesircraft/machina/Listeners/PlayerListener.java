@@ -4,6 +4,7 @@ import net.aesircraft.machina.Data.Config;
 import net.aesircraft.machina.Data.DataHolder;
 import net.aesircraft.machina.Machina;
 import net.aesircraft.machina.Objects.MachinaBlock;
+import net.aesircraft.machina.Objects.ManaLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -68,7 +69,7 @@ public class PlayerListener implements Listener {
 	MachinaBlock mb = DataHolder.workings.get(e.getPlayer());
 	mb.load();
 	int id = e.getBlock().getTypeId();
-	byte data = e.getBlock().getData();
+	short data = e.getBlock().getData();
 	ItemStack i = mb.getType();
 	if (id != i.getTypeId() || data != i.getDurability()) {
 	    return;
@@ -262,6 +263,9 @@ public class PlayerListener implements Listener {
 	    if (DataHolder.workings.get(e.getPlayer()).getBlock() == e.getBlock()) {
 		DataHolder.workings.get(e.getPlayer()).finishWorking();
 	    }
+	}
+	if (DataHolder.workings2.containsKey(new ManaLocation(mb.getBlock().getLocation()).getString())){
+	    DataHolder.workings2.get(new ManaLocation(mb.getBlock().getLocation()).getString()).finishWorking();
 	}
 	mb.breakNaturally();
     }
